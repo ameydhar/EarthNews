@@ -160,12 +160,12 @@
               mapTypeId: google.maps.MapTypeId.ROADMAP
           });
      
-          google.maps.event.addListener(map, 'bounds_changed', function() {
+          /*google.maps.event.addListener(map, 'bounds_changed', function() {
               var SWlng = map.getBounds().getSouthWest().lng()
               var SWlat = map.getBounds().getSouthWest().lat()
               var NElat = map.getBounds().getNorthEast().lat()
               var NElng = map.getBounds().getNorthEast().lng()
-          });
+          });*/
 
 
 
@@ -218,39 +218,38 @@
               var NElng = northEast.lng()
               var NElat = northEast.lat()
               var q = "./query?qtype=news&lat1="+NElat+"&long1="+NElng+"&lat2="+SWlat+"&long2="+SWlng;
-              console.log(q)
-              console.log("MAP0");
-              console.log(map);
-              $.getJSON(q, function(result) {console.log("MAP1");console.log(map);drawNews(result, map);});
+              //console.log(q)
+              //console.log("MAP0");
+              //console.log(map);
+              $.getJSON(q, function(result) {drawNews(result, map);});
               ///////////////////////////////////////////////////////
 
           });
       }
-      function createMarker(map, location, html) {
+      function createMarker(map, location, html, summary) {
               var marker = new RichMarker({
                   position: location,
                   map: map,
                   //anchor: google.maps.RichMarkerPosition.BOTTOM_RIGHT,
                   content: html
               });
-              return marker;
-
-              /*
-              // popup info window
+              
               var iw = new google.maps.InfoWindow({
-                  content: 'Hello world content'
+                  content: summary
               });
               google.maps.event.addListener(marker, 'click', function (e) { iw.open(map, marker); });
-              */
+              //google.maps.event.addListener(marker, 'drag', function (e) { iw.close(map, marker); });
+              return marker;
+
       } 
     function drawNews(result, map)
       {
         var newsSize = ['news_0', 'news_1', 'news_2', 'news_3', 'news_4', 'news_5', 'news_6', 'news_7', 'news_8', 'news_9'];
         var jsonobj = eval(result);
-        console.log("Articles: " + jsonobj.articles.length)
-        console.log(jsonobj.articles)
-        console.log("MAP2")
-        console.log(map)
+        //console.log("Articles: " + jsonobj.articles.length)
+        //console.log(jsonobj.articles)
+        //console.log("MAP2")
+        //console.log(map)
             
         for(var i = 0; i < jsonobj.articles.length; i++)
         {
@@ -261,7 +260,12 @@
             var size = 2;
             var content = jsonobj.articles[i]["title"];
             var html = '<div class="news news_default ' + newsSize[size] + '">' +  content + '</div>';
-            map.markers.push( createMarker(map, location, html) );
+            var info = "";
+            info = 'City: '+jsonobj.articles[i]['cityName'] + '<br/>'+
+                   'Summary: '+jsonobj.articles[i]['summary'] + '<br/>'+
+                   'source_url: '+'<a href="'+ jsonobj.articles[i]['source_url']+ '" target="_blank">' + jsonobj.articles[i]['source_url'] +'</a>' + '<br/>';
+            //console.log(info)
+            map.markers.push( createMarker(map, location, html, info) );
         
         }
        }
