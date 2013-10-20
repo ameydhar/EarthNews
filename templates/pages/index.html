@@ -1,27 +1,116 @@
 <!DOCTYPE html>
 <html> 
 <head> 
-   <meta http-equiv="content-type" content="text/html; charset=UTF-8"/> 
-   <title>Google Maps v3 - getBounds is undefined</title> 
-   <script src="http://maps.google.com/maps/api/js?sensor=false" 
-           type="text/javascript"></script> 
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/> 
+    <title>EarthNews - A visualization of what's happening </title> 
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyATQYXHHzZr_xIVYNcRmFzHxVOhNLSXc_U&sensor=false"></script> 
+    <script type="text/javascript" src="static/js/richmarker-compiled.js"></script>
+
+    <style>
+      html { height: 100%;}
+      body {
+          height: 100%;
+          margin: 0;
+          padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+
+      /*TODO: different pos, boxsize for each news-box */
+      .news-box {
+        font-family: "Helvetica Neue",Helvetica,Arial,"sans-serif";
+        position: absolute;
+        padding: 1px 4px;
+        line-height: 1.2em;
+        margin: 4px 7px;
+        -webkit-transform: translate3d(0px,0px,0px);
+
+        background-color: #000;
+        color: #fff;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        border: 1px solid #000; 
+
+        width: 103px;
+        height: 50px;
+
+        font-size: 31.2px;
+        /*top: 292px;
+        left: 918.5px;
+        */
+        display: block;
+        opacity: 0.7; 
+      }
+
+    </style>
 </head> 
 <body> 
-   <div id="map" style="width: 500px; height: 350px;"></div> 
+    <div id="map"></div> 
 
-   <script type="text/javascript"> 
-      var map = new google.maps.Map(document.getElementById("map"), {
-         zoom: 4,
-         center: new google.maps.LatLng(0,0),
-         mapTypeId: google.maps.MapTypeId.ROADMAP
-      });
+    <script type="text/javascript"> 
 
-      google.maps.event.addListener(map, 'bounds_changed', function() {
-		var SWlng=map.getBounds().getSouthWest().lng()
-		var SWlat=map.getBounds().getSouthWest().lat()
-		var NElat=map.getBounds().getNorthEast().lat()
-		var NElng=map.getBounds().getNorthEast().lng()
-      });
-   </script> 
+      function initialize() {
+          var map = new google.maps.Map(document.getElementById("map"), {
+              zoom: 4,
+              center: new google.maps.LatLng(0,0),
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+          });
+
+          google.maps.event.addListener(map, 'bounds_changed', function() {
+              var SWlng = map.getBounds().getSouthWest().lng()
+              var SWlat = map.getBounds().getSouthWest().lat()
+              var NElat = map.getBounds().getNorthEast().lat()
+              var NElng = map.getBounds().getNorthEast().lng()
+          });
+
+          google.maps.event.addDomListener(map, 'idle', function () {
+
+              // TODO: remove this section
+              // Randomly generate several locations to demo markers
+              var boundBox = map.getBounds();
+              var southWest = boundBox.getSouthWest();
+              var northEast = boundBox.getNorthEast();
+              var lngSpan = northEast.lng() - southWest.lng();
+              var latSpan = northEast.lat() - southWest.lat();
+              var locations = [];
+              for (var j = 0; j < 10; j++)
+              {
+                  var location = new google.maps.LatLng(
+                      southWest.lat() + latSpan * Math.random(),
+                      southWest.lng() + lngSpan * Math.random()
+                  );
+                  locations.push(location);
+              }
+              ///////////////////////////////////////////////////////
+
+              setMarkers(map, locations);
+
+          });
+      }
+
+      function setMarkers(map, locations) {
+          for (var i = 0; i < locations.length; i++) {
+              var marker = new RichMarker({
+                  position: locations[i],
+                  map: map,
+                  //anchor: google.maps.RichMarkerPosition.BOTTOM_RIGHT,
+                  content: '<div class="news-box">Lorem ipsum dolor sit amet, ex eruditi imperdiet mea</div>'
+              });
+
+              /*
+              // popup info window
+              var iw = new google.maps.InfoWindow({
+                  content: 'Hello world content'
+              });
+              google.maps.event.addListener(marker, 'click', function (e) { iw.open(map, marker); });
+              */
+          }
+      } 
+
+      google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script> 
 </body> 
 </html>
