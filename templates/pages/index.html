@@ -52,7 +52,7 @@
         /*top: 292px;
         left: 918.5px;
         */
-        display: block;
+        display: inline-block;
         opacity: 0.7; 
       }
 
@@ -74,7 +74,9 @@
         border-radius: 3px;
         border: 1px solid #000;
 
-        display: block;
+        display: inline-block;
+        overflow: hidden;
+        white-space: nowrap;
       }
 
       .news_default:hover {
@@ -93,52 +95,52 @@
 
 
       .news_0 {
-        font-size: 10px;
+        font-size: 10px !important;
         opacity: .3;
         z-index: 989;
       }
       .news_1 {
-        font-size: 12px;
+        font-size: 12px !important;
         opacity: .3;
         z-index: 990;
       }
       .news_2 {
-        font-size: 14px;
+        font-size: 14px !important;
         opacity: .2;
         z-index: 991;
       }
       .news_3 {
-        font-size: 16px;
+        font-size: 16px !important;
         opacity: .3;
         z-index: 992;
       }
       .news_4 {
-        font-size: 17px;
+        font-size: 17px !important;
         opacity: .3;
         z-index: 993;
       }
       .news_5 {
-        font-size: 22px;
+        font-size: 22px !important;
         opacity: .4;
         z-index: 994;
       }
       .news_6 {
-        font-size: 26px;
+        font-size: 26px  !important;
         opacity: .5;
         z-index: 995;
       }
       .news_7 {
-        font-size: 30px;
+        font-size: 30px !important;
         opacity: .6;
         z-index: 996;
       }
       .news_8 {
-        font-size: 36px;
+        font-size: 36px !important;
         opacity: .7;
         z-index: 997;
       }
       .news_9 {
-        font-size: 42px;
+        font-size: 42px !important;
         opacity: .8;
         z-index: 998;
       }
@@ -172,8 +174,10 @@
               return this.markers;
           };
           google.maps.Map.prototype.clearMarkers = function() {
+              console.log(this.markers);
               for (var i = 0; i < this.markers.length; i++){
-                  this.markers[i].setMap(null);
+                  if (this.markers[i] != null)
+                      this.markers[i].setMap(null);
               }
               this.markers = [];
           };
@@ -199,25 +203,22 @@
                   var size = parseInt(Math.random() * newsSize.length);
                   var content = 'Lorem ipsum dolor sit amet, ex eruditi imperdiet mea';
                   var html = '<div class="news news_default ' + newsSize[size] + '">' +  content + '</div>';
-                  this.markers.push({location: location, content: html});
+
+                  this.markers.push( createMarker(map, location, html) );
               }
               ///////////////////////////////////////////////////////
-
-              for (var i = 0; i < this.markers.length; i++) {
-                  console.log(this.markers[i]);
-                  setMarkers(map, this.markers[i].location, this.markers[i].content);
-               }
 
           });
       }
 
-      function setMarkers(map, location, html) {
+      function createMarker(map, location, html) {
               var marker = new RichMarker({
                   position: location,
                   map: map,
                   //anchor: google.maps.RichMarkerPosition.BOTTOM_RIGHT,
                   content: html
               });
+              return marker;
 
               /*
               // popup info window
