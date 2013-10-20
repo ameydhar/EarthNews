@@ -28,9 +28,9 @@ def home():
     #db_session.rollback()
 #    print '500'
 
-#@app.errorhandler(404)
-#def internal_error(error):
-#    print '404'
+@app.errorhandler(404)
+def internal_error(error):
+    return '404'
 
 if not app.debug:
     file_handler = FileHandler('error.log')
