@@ -3,7 +3,7 @@
 <head> 
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/> 
     <title>EarthNews - A visualization of what's happening </title> 
-    <script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyATQYXHHzZr_xIVYNcRmFzHxVOhNLSXc_U&sensor=false"></script> 
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyATQYXHHzZr_xIVYNcRmFzHxVOhNLSXc_U&sensor=true"></script> 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
 </script>
     <script type="text/javascript" src="static/js/richmarker-compiled.js"></script>
@@ -108,7 +108,7 @@
       }
       .news_2 {
         font-size: 14px !important;
-        opacity: .2;
+        opacity: .4;
         z-index: 991;
       }
       .news_3 {
@@ -155,8 +155,8 @@
     <script type="text/javascript"> 
       function initialize() {
           var map = new google.maps.Map(document.getElementById("map"), {
-              zoom: 4,
-              center: new google.maps.LatLng(0,0),
+              zoom: 5,
+              center: new google.maps.LatLng(40.6700,-73.9400),
               mapTypeId: google.maps.MapTypeId.ROADMAP
           });
      
