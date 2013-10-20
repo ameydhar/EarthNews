@@ -23,14 +23,14 @@ def home():
 
 # Error handlers.
 
-@app.errorhandler(500)
-def internal_error(error):
+#@app.errorhandler(500)
+#def internal_error(error):
     #db_session.rollback()
-    return render_template('errors/500.html'), 500
+#    print '500'
 
-@app.errorhandler(404)
-def internal_error(error):
-    return render_template('errors/404.html'), 404
+#@app.errorhandler(404)
+#def internal_error(error):
+#    print '404'
 
 if not app.debug:
     file_handler = FileHandler('error.log')
