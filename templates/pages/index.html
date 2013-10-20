@@ -226,6 +226,8 @@
 
           });
       }
+      var openiw = null;
+      var openiwmarker = null;
       function createMarker(map, location, html, summary) {
               var marker = new RichMarker({
                   position: location,
@@ -237,7 +239,16 @@
               var iw = new google.maps.InfoWindow({
                   content: summary
               });
-              google.maps.event.addListener(marker, 'click', function (e) { iw.open(map, marker); });
+              google.maps.event.addListener(marker, 'click', function (e) {
+               
+               if (openiw)
+               {
+                openiw.close(map, openiwmarker);
+               }
+               iw.open(map, marker);
+               openiw = iw; 
+               openiwmarker = marker; 
+               });
               //google.maps.event.addListener(marker, 'drag', function (e) { iw.close(map, marker); });
               return marker;
 
