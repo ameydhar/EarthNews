@@ -2,7 +2,7 @@ EarthNews
 =========
 
 Facebook NY Hackathon 2013   
-Team HackerSquad: Ashima, Amey, Gaurav, Ming   
+Team HackerSquad: Ashima (aa3470@columbia.edu), Amey(aap2174@columbia.edu), Gaurav(ga2371@columbia.edu), Ming(mc3808@columbia.edu)   
 
 
 Quick Start
