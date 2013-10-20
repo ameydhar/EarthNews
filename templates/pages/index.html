@@ -17,6 +17,18 @@
         height: 100%;
       }
 
+      html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        outline: inherit;
+        font-weight: inherit;
+        font-size: 100%;
+        font-family: inherit;
+        vertical-align: baseline;
+        background: transparent;
+      }
+
       /*TODO: different pos, boxsize for each news-box */
       .news-box {
         font-family: "Helvetica Neue",Helvetica,Arial,"sans-serif";
@@ -44,8 +56,28 @@
         opacity: 0.7; 
       }
 
-      .news-box:hover {
-        z-index: 998;
+      .news {
+        font-family: "Helvetica Neue",Helvetica,Arial,"sans-serif";
+        position: absolute;
+        z-index: 997;
+        padding: 1px 4px;
+        line-height: 1.2em;
+        margin: 4px 7px;
+        -webkit-transform: translate3d(0px,0px,0px);  
+      }
+
+      .news_default {
+        background-color: #000;
+        color: #fff;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        border: 1px solid #000;
+
+        display: block;
+      }
+
+      .news_default:hover {
         cursor: pointer;
         opacity: .9!important;
 
@@ -56,6 +88,59 @@
         -moz-box-shadow: 0 .2em .3em rgba(0,0,0,0.75);
         border: 1px solid #000;
         text-shadow: #000 0 1px 2px;
+      }
+
+
+
+      .news_0 {
+        font-size: 10px;
+        opacity: .3;
+        z-index: 989;
+      }
+      .news_1 {
+        font-size: 12px;
+        opacity: .3;
+        z-index: 990;
+      }
+      .news_2 {
+        font-size: 14px;
+        opacity: .2;
+        z-index: 991;
+      }
+      .news_3 {
+        font-size: 16px;
+        opacity: .3;
+        z-index: 992;
+      }
+      .news_4 {
+        font-size: 17px;
+        opacity: .3;
+        z-index: 993;
+      }
+      .news_5 {
+        font-size: 22px;
+        opacity: .4;
+        z-index: 994;
+      }
+      .news_6 {
+        font-size: 26px;
+        opacity: .5;
+        z-index: 995;
+      }
+      .news_7 {
+        font-size: 30px;
+        opacity: .6;
+        z-index: 996;
+      }
+      .news_8 {
+        font-size: 36px;
+        opacity: .7;
+        z-index: 997;
+      }
+      .news_9 {
+        font-size: 42px;
+        opacity: .8;
+        z-index: 998;
       }
 
     </style>
@@ -79,38 +164,59 @@
               var NElng = map.getBounds().getNorthEast().lng()
           });
 
+
+
+          // Randomly generate several locations to demo markers
+          google.maps.Map.prototype.markers = [];
+          google.maps.Map.prototype.getMarkers = function() {
+              return this.markers;
+          };
+          google.maps.Map.prototype.clearMarkers = function() {
+              for (var i = 0; i < this.markers.length; i++){
+                  this.markers[i].setMap(null);
+              }
+              this.markers = [];
+          };
+
+
+
           google.maps.event.addDomListener(map, 'idle', function () {
+              this.clearMarkers();
 
               // TODO: remove this section
-              // Randomly generate several locations to demo markers
+              var newsSize = ['news_0', 'news_1', 'news_2', 'news_3', 'news_4', 'news_5', 'news_6', 'news_7', 'news_8', 'news_9'];
               var boundBox = map.getBounds();
               var southWest = boundBox.getSouthWest();
               var northEast = boundBox.getNorthEast();
               var lngSpan = northEast.lng() - southWest.lng();
               var latSpan = northEast.lat() - southWest.lat();
-              var locations = [];
               for (var j = 0; j < 10; j++)
               {
                   var location = new google.maps.LatLng(
                       southWest.lat() + latSpan * Math.random(),
                       southWest.lng() + lngSpan * Math.random()
                   );
-                  locations.push(location);
+                  var size = parseInt(Math.random() * newsSize.length);
+                  var content = 'Lorem ipsum dolor sit amet, ex eruditi imperdiet mea';
+                  var html = '<div class="news news_default ' + newsSize[size] + '">' +  content + '</div>';
+                  this.markers.push({location: location, content: html});
               }
               ///////////////////////////////////////////////////////
 
-              setMarkers(map, locations);
+              for (var i = 0; i < this.markers.length; i++) {
+                  console.log(this.markers[i]);
+                  setMarkers(map, this.markers[i].location, this.markers[i].content);
+               }
 
           });
       }
 
-      function setMarkers(map, locations) {
-          for (var i = 0; i < locations.length; i++) {
+      function setMarkers(map, location, html) {
               var marker = new RichMarker({
-                  position: locations[i],
+                  position: location,
                   map: map,
                   //anchor: google.maps.RichMarkerPosition.BOTTOM_RIGHT,
-                  content: '<div class="news-box">Lorem ipsum dolor sit amet, ex eruditi imperdiet mea</div>'
+                  content: html
               });
 
               /*
@@ -120,7 +226,6 @@
               });
               google.maps.event.addListener(marker, 'click', function (e) { iw.open(map, marker); });
               */
-          }
       } 
 
       google.maps.event.addDomListener(window, 'load', initialize);
